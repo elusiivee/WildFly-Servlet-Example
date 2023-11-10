@@ -55,6 +55,10 @@ sudo systemctl daemon-reload
 ```
 sudo systemctl start wildfly
 ```
+### Install your test web application
+```
+sudo mv your-app.war /opt/wildfly/standalone/deployments/
+```
 ### Enable the WildFly service to start on boot
 ```
 sudo systemctl enable wildfly
