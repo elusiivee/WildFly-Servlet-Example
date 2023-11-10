@@ -101,12 +101,12 @@ sudo a2enmod proxy_http
 ```
 sudo systemctl restart apache2
 ```
-### Configure WildFly to use the correct IP address
+### Configure WildFly to use the correct IP address [optional]
 ```
 sudo sed -i 's/<inet-address value="${jboss.bind.address.management:127.0.0.1}"/<inet-address value="${jboss.bind.address.management:0.0.0.0}"/g' /opt/wildfly/standalone/configuration/standalone.xml
 sudo sed -i 's/<inet-address value="${jboss.bind.address:127.0.0.1}"/<inet-address value="${jboss.bind.address:0.0.0.0}"/g' /opt/wildfly/standalone/configuration/standalone.xml
 ```
-### Restart the WildFly service
+### Restart the WildFly service [optional]
 ```
 sudo systemctl restart wildfly
 ```
