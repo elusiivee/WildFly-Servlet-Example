@@ -14,7 +14,7 @@ pipeline {
                 sh " rm -rf WildFly-Servlet-Example"
                 
                 // Get some code from a GitHub repository
-                sh "git clone https://github.com/YegorMaksymchuk/WildFly-Servlet-Example.git"
+                sh "git clone https://github.com/XadmaX/WildFly-Servlet-Example.git"
 
                 // Run Maven on a Unix agent.
                 sh "cd WildFly-Servlet-Example/ && mvn clean install"
