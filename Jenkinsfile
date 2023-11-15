@@ -1,7 +1,5 @@
 pipeline {
-    agent { 
-        label "ubuntu-slave" 
-    }
+    agent any
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
@@ -11,21 +9,23 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh " rm -rf WildFly-Servlet-Example"
+                // Clear Workspace
+                cleanWs()
                 
                 // Get some code from a GitHub repository
-                sh "git clone https://github.com/XadmaX/WildFly-Servlet-Example.git"
+                git branch: 'main', url: 'https://github.com/XadmaX/WildFly-Servlet-Example.git'
 
                 // Run Maven on a Unix agent.
-                sh "cd WildFly-Servlet-Example/ && mvn clean install"
-
+                sh "mvn clean install"
             }
-    
-    post { 
-        always { 
-            echo 'I will always say Hello again!!'
-        }
-    }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+                }
+            }
         }
     }
 }
