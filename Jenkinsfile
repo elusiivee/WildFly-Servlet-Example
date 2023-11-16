@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-      label {
-        label 'ubuntu-slave'
-        retries 10
-      }
-    }
+    agent any
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
@@ -21,7 +16,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/XadmaX/WildFly-Servlet-Example.git'
 
                 // Run Maven on a Unix agent.
-                sh "mvn clean install"
+                sh "mvn clean package"
             }
 
             post {
