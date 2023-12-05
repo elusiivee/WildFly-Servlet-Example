@@ -16,9 +16,9 @@ sudo apt install apache2 -y
 ```
 ### Download and unpack WildFly distribution
 ```
-wget https://download.jboss.org/wildfly/24.0.1.Final/wildfly-24.0.1.Final.tar.gz
-tar xf wildfly-24.0.1.Final.tar.gz
-sudo mv wildfly-24.0.1.Final /opt/wildfly
+wget https://github.com/wildfly/wildfly/releases/download/30.0.0.Final/wildfly-30.0.0.Final.tar.gz
+tar xf wildfly-30.0.0.Final.tar.gz
+sudo mv wildfly-30.0.0.Final /opt/wildfly
 ```
 ### Create a new user and group for WildFly service
 ```
