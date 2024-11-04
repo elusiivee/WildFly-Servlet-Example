@@ -7,7 +7,7 @@ pipeline {
     }
 
     tools {
-        maven "M3" // Переконайтеся, що ви налаштували Maven у Jenkins
+        maven "mvn" // Переконайтеся, що ви налаштували Maven у Jenkins
     }
 
     stages {
