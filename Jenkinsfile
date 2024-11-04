@@ -32,7 +32,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent(['key-03b31388818553582']) { 
+                sshagent(['ubuntu-slave']) { 
                     // Копіюємо .war файл на EC2 інстанс
                     sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@13.48.135.73:/opt/wildfly/standalone/deployments/'
 
