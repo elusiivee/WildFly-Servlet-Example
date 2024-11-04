@@ -1,33 +1,30 @@
 pipeline {
     agent {
         label {
-            label 'ubuntu-slave'
+            label 'ubuntu-slave' // Замініть на вашого агента, якщо потрібно
             retries 5
         }
     }
 
     tools {
-        // Встановіть версію Maven, налаштовану як "M3", і додайте її до шляху.
-        maven "mvn"
+        maven "M3" // Переконайтеся, що ви налаштували Maven у Jenkins
     }
 
     stages {
         stage('Build') {
             steps {
-                // Очистити робочу директорію
-                cleanWs()
-                
+                cleanWs() // Очистити робочу директорію
+
                 // Завантажити код з репозиторію GitHub
                 git branch: 'main', url: 'https://github.com/XadmaX/WildFly-Servlet-Example.git'
 
-                // Запустіть Maven на Unix-агенті.
+                // Запустіть Maven для збору проекту
                 sh "mvn clean package"
             }
 
             post {
-                // Якщо Maven зміг запустити тести, навіть якщо деякі тести
-                // провалилися, зафіксувати результати тестування та архівувати .war файл.
                 success {
+                    // Архівувати артефакти, які включають ваш .war файл
                     archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
                 }
             }
@@ -37,10 +34,10 @@ pipeline {
             steps {
                 sshagent(['your-ssh-credential-id']) { // Вставте ваш ID SSH-ключа в Jenkins
                     // Копіюємо .war файл на EC2 інстанс
-                    sh 'scp -o StrictHostKeyChecking=no target/*.war <ec2_user>@<ec2_instance_ip>:/opt/wildfly/standalone/deployments/'
-                    
-                    // Перезапустіть WildFly, щоб розгорнути нову версію
-                    sh 'ssh -o StrictHostKeyChecking=no <ec2_user>@<ec2_instance_ip> "sudo systemctl restart wildfly"'
+                    sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@13.48.135.73:/opt/wildfly/standalone/deployments/'
+
+                    // Перезапустіть WildFly
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@13.48.135.73 "sudo systemctl restart wildfly"'
                 }
             }
         }
