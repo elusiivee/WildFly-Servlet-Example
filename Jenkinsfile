@@ -34,10 +34,10 @@ pipeline {
             steps {
                 sshagent(['ubuntu-slave']) { 
                     // Копіюємо .war файл на EC2 інстанс
-                    sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@13.48.135.73:/opt/wildfly/standalone/deployments/'
+                    sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@13.48.135.73:/opt/wildfly/standalone/deployments/'
 
                     // Перезапустіть WildFly
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.48.135.73 "sudo systemctl restart wildfly"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@13.48.135.73 "sudo systemctl restart wildfly"'
                 }
             }
         }
