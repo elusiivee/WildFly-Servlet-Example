@@ -1,34 +1,46 @@
 pipeline {
     agent {
-      label {
-        label 'ubuntu-slave'
-        retries 5
-      }
+        label {
+            label 'ubuntu-slave'
+            retries 5
+        }
     }
 
     tools {
-        // Install the Maven version configured as "M3" and add it to the path.
+        // Встановіть версію Maven, налаштовану як "M3", і додайте її до шляху.
         maven "mvn"
     }
 
     stages {
         stage('Build') {
             steps {
-                // Clear Workspace
+                // Очистити робочу директорію
                 cleanWs()
                 
-                // Get some code from a GitHub repository
+                // Завантажити код з репозиторію GitHub
                 git branch: 'main', url: 'https://github.com/XadmaX/WildFly-Servlet-Example.git'
 
-                // Run Maven on a Unix agent.
+                // Запустіть Maven на Unix-агенті.
                 sh "mvn clean package"
             }
 
             post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
+                // Якщо Maven зміг запустити тести, навіть якщо деякі тести
+                // провалилися, зафіксувати результати тестування та архівувати .war файл.
                 success {
                     archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent(['your-ssh-credential-id']) { // Вставте ваш ID SSH-ключа в Jenkins
+                    // Копіюємо .war файл на EC2 інстанс
+                    sh 'scp -o StrictHostKeyChecking=no target/*.war <ec2_user>@<ec2_instance_ip>:/opt/wildfly/standalone/deployments/'
+                    
+                    // Перезапустіть WildFly, щоб розгорнути нову версію
+                    sh 'ssh -o StrictHostKeyChecking=no <ec2_user>@<ec2_instance_ip> "sudo systemctl restart wildfly"'
                 }
             }
         }
