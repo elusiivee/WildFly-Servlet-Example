@@ -1,13 +1,13 @@
 pipeline {
     agent {
         label {
-            label 'ubuntu-slave' // Замініть на вашого агента, якщо потрібно
+            label 'ubuntu-slave'
             retries 5
         }
     }
 
     tools {
-        maven "mvn" // Переконайтеся, що ви налаштували Maven у Jenkins
+        maven "mvn"
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
 
             post {
                 success {
-                    // Архівувати артефакти, які включають ваш .war файл
+                    /
                     archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent(['your-ssh-credential-id']) { // Вставте ваш ID SSH-ключа в Jenkins
+                sshagent(['key-03b31388818553582']) { 
                     // Копіюємо .war файл на EC2 інстанс
                     sh 'scp -o StrictHostKeyChecking=no target/*.war ubuntu@13.48.135.73:/opt/wildfly/standalone/deployments/'
 
